@@ -1,0 +1,24 @@
+version: "3"
+services:
+  mqtt:
+    image: iqtlabs/edgetech-mqtt:latest
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    restart: unless-stopped
+  s3-uploader:
+    image: iqtlabs/edgetech-s3-uploader:latest
+    build:
+      context: ../edgetech-s3-uploader/s3-uploader
+      dockerfile: ./Dockerfile
+    environment:
+    restart: unless-stopped
+    environment:
+      - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/edgetech-s3-uploader/string
+      - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
+      - TARGET_DIR=/sensor-data
+      - INCLUDE_FILES=*.flac
+      - S3_BUCKET=
+      - MQTT_IP=mqtt
+    volumes:
+      - /home/mobian/sensor-data:/sensor-data
