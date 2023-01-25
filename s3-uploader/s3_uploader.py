@@ -18,7 +18,6 @@ class S3Uploader(BaseMQTTPubSub):
         self,
         send_data_topic: str,
         c2c_topic: str,
-        data_dir: str,
         include_files: str,
         target_dir: str,
         s3_bucket: str,
@@ -37,7 +36,7 @@ class S3Uploader(BaseMQTTPubSub):
 
         self.sync_process = None
 
-        self.s3_client=boto3.client('s3_client')
+        #self.s3_client=boto3.client('s3_client')
 
         self.connect_client()
         sleep(1)
@@ -58,7 +57,7 @@ class S3Uploader(BaseMQTTPubSub):
         try:
             cmd_flags=""
             if self.include_files != "":
-                cmd_flags=cmd_flags + f"--include {self.include_files}"
+                cmd_flags=cmd_flags + f"--exclude "*" --include {self.include_files}"
 
             sync_cmd = (
                 f"aws s3 sync {self.target_dir} s3://{self.s3_bucket} " + cmd_flags
@@ -66,6 +65,12 @@ class S3Uploader(BaseMQTTPubSub):
             self.sync_process = subprocess.Popen(
                 sync_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
+
+            #Wait for process to complete
+            while self.sync_process.poll() is None:
+                time.sleep(0.01)
+            stdout,stderr=self.sync_process.communicate()
+            self._send_data(stdout)
 
         except Exception as e:
             if self.debug:

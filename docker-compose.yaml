@@ -17,7 +17,7 @@ services:
       - C2_TOPIC=/AISonobuoy/<HOSTNAME>/C2/edgetech-c2/string
       - TARGET_DIR=/sensor-data
       - INCLUDE_FILES=*.flac
-      - S3_BUCKET=
+      - S3_BUCKET=aisonobuoy-test
       - MQTT_IP=mqtt
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
