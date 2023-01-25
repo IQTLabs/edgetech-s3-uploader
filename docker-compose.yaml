@@ -9,9 +9,8 @@ services:
   s3-uploader:
     image: iqtlabs/edgetech-s3-uploader:latest
     build:
-      context: ../edgetech-s3-uploader/s3-uploader
+      context: ./s3-uploader
       dockerfile: ./Dockerfile
-    environment:
     restart: unless-stopped
     environment:
       - SEND_DATA_TOPIC=/AISonobuoy/<HOSTNAME>/edgetech-s3-uploader/string
@@ -20,5 +19,8 @@ services:
       - INCLUDE_FILES=*.flac
       - S3_BUCKET=
       - MQTT_IP=mqtt
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:?error}
     volumes:
       - /home/mobian/sensor-data:/sensor-data

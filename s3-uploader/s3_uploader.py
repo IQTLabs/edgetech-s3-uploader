@@ -1,7 +1,7 @@
 import time
 import json
 import os
-import boto3
+#import boto3
 from time import sleep
 from datetime import datetime
 from typing import Any, Dict
