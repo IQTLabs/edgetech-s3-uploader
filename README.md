@@ -15,6 +15,12 @@ export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 export AWS_DEFAULT_REGION=us-east-2
 ``` 
 
+## To Run
+```bash
+docker compose build
+docker compose up -d
+```
+
 ## TODO
 - Docker Secrets for AWS Credentials
 - Upload a single file

@@ -51,40 +51,30 @@ class S3Uploader(BaseMQTTPubSub):
         c2c_payload = json.loads(str(msg.payload.decode("utf-8")))
         if c2c_payload["msg"] == "S3 SYNC FILES":
             self._send_data(f"syncing dir: {self.target_dir}")
-            self._s3_sync_dir()
+            print("Callback recieved...")
 
-    def _s3_sync_dir(self: Any) -> None:
-        try:
-            cmd_flags=""
-            if self.include_files != "":
-                cmd_flags=cmd_flags + f"--exclude "*" --include {self.include_files}"
+            try:
+                cmd_flags=""
+                if self.include_files != "":
+                    cmd_flags=cmd_flags + f'--exclude "*" --include {self.include_files}'
+                sync_cmd = f'aws s3 sync {self.target_dir} s3://{self.s3_bucket} ' + cmd_flags
+                print(sync_cmd)
+                self._send_data(sync_cmd)#+ cmd_flags)
+                self.sync_process = subprocess.Popen(
+                    sync_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                )
+                #Wait for process to complete
+                while self.sync_process.poll() is None:
+                    time.sleep(0.1)
+                stdout,stderr=self.sync_process.communicate()
+                print(stdout,stderr)
+                print(self.sync_process.returncode)
+                self._send_data(stdout.decode())
 
-            sync_cmd = (
-                f"aws s3 sync {self.target_dir} s3://{self.s3_bucket} " + cmd_flags
-            )
-            self.sync_process = subprocess.Popen(
-                sync_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            )
-
-            #Wait for process to complete
-            while self.sync_process.poll() is None:
-                time.sleep(0.01)
-            stdout,stderr=self.sync_process.communicate()
-            self._send_data(stdout)
-
-        except Exception as e:
-            if self.debug:
+            except Exception as e:
+                if self.debug:
                     print(e)
 
-
-    #TODO: function to upload a single file 
-    #def _s3_upload_file(self: Any) -> None:
-    #    self.upload_object_name=os.path.basename(filename)
-    #    try:
-    #        res = self.s3_client.upload_file(filename,'bucket_name',self.upload_object_name)
-    #    except Exception as e:
-    #        if self.debug:
-    #                print(e)
 
     def main(self: Any) -> None:
 
