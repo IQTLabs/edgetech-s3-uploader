@@ -2,11 +2,11 @@
 A module to upload object to S3 storage.
 
 ## Enviroment Variables
-SEND_DATA_TOPIC Topic to send events to
-C2_TOPIC        Topic to issue sync command with message "S3 SYNC FILES" payload
-DATA_DIR        Data Directory to sync
-INCLUDE_FILES   Only sync files of this filetype
-MQTT_IP         MQTT Broker IP
+- SEND_DATA_TOPIC Topic to send events to
+- C2_TOPIC        Topic to issue sync command with message "S3 SYNC FILES" payload
+- DATA_DIR        Data Directory to sync
+- INCLUDE_FILES   Only sync files of this filetype
+- MQTT_IP         MQTT Broker IP
 
 Add the following to `.profile` to pass your specific AWS credentials.
 ```bash
