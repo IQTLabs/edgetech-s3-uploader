@@ -1,4 +1,6 @@
-import time
+"""This file contains the S3UploaderPubSub which class which is a child class of BaseMQTTPubSub.
+It uses the AWS CLI to push data up to S3 based on a trigger from the C2 command.
+"""
 import json
 import os
 
@@ -13,7 +15,7 @@ from base_mqtt_pub_sub import BaseMQTTPubSub
 
 
 class S3UploaderPubSub(BaseMQTTPubSub):
-    """This class starts a AWS S3 sync when triggered by C2 and publishes status to MQTT.
+    """The S3UploaderPubSub starts a AWS S3 sync when triggered by C2 and publishes status to MQTT.
     Args:
         BaseMQTTPubSub (BaseMQTTPubSub): parent class written in the EdgeTech Core module
     """
@@ -36,9 +38,10 @@ class S3UploaderPubSub(BaseMQTTPubSub):
             s3_bucket (str): name of AWS S3 bucket
             debug (bool, optional): If the debug mode is turned on, log statements print to stdout.
         """
-
+        # override BaseMQTTPubSub keyword arguments
         super().__init__(**kwargs)
 
+        # assigning class attributes
         self.send_data_topic = send_data_topic
         self.c2c_topic = c2c_topic
 
@@ -49,6 +52,7 @@ class S3UploaderPubSub(BaseMQTTPubSub):
 
         self.sync_process = None
 
+        # setting up MQTT client
         self.connect_client()
         sleep(1)
         self.publish_registration("S3 Uploader Registration")
@@ -59,11 +63,15 @@ class S3UploaderPubSub(BaseMQTTPubSub):
     def _c2c_callback(
         self: Any, _client: mqtt.Client, _userdata: Dict[Any, Any], msg: Any
     ) -> None:
-        """Upon message from C2, this callback uses the AWS cli to sync a directory
+        """Upon message from C2, this callback uses the AWS CLI to sync a directory
         with a specified S3 Bucket
         """
+        # decode C2 payload
         c2c_payload = json.loads(str(msg.payload.decode("utf-8")))
+
+        # if C2 message payload is S3 SYNC, trigger the sync process
         if c2c_payload["msg"] == "S3 SYNC":
+            # Essentially logging using MQTT
             self._send_data(f"syncing dir: {self.target_dir}")
             try:
                 # Use AWS CLI to sync to S3 Bucket
@@ -73,20 +81,23 @@ class S3UploaderPubSub(BaseMQTTPubSub):
                     f"aws s3 sync {self.target_dir} s3://{self.s3_bucket} " + cmd_flags
                 )
 
+                # using subprocess to call the command
                 self.sync_process = subprocess.Popen(sync_cmd.split())
                 stdout, stderr = self.sync_process.communicate()
 
                 # Print Sucess or failure message
                 if self.sync_process.returncode == 0:
                     self._send_data(stdout.decode())
-                    print(stdout)
+                    if self.debug:
+                        print(stdout)
                 else:
                     self._send_data(stderr.decode())
-                    print(stderr)
+                    if self.debug:
+                        print(stderr)
 
-            except Exception as e:
+            except KeyboardInterrupt as exception:
                 if self.debug:
-                    print(e)
+                    print(exception)
 
     def main(self: Any) -> None:
         """Main loop and function that setup the heartbeat to keep the TCP/IP
@@ -103,15 +114,12 @@ class S3UploaderPubSub(BaseMQTTPubSub):
 
         while True:
             try:
+                # flush pending scheduled tasks
                 schedule.run_pending()
-                time.sleep(0.001)
-            except KeyboardInterrupt:
+                sleep(0.001)
+            except KeyboardInterrupt as exception:
                 if self.debug:
-                    print("s3-uploader application stopped!")
-
-            except Exception as e:
-                if self.debug:
-                    print(e)
+                    print(exception)
 
 
 if __name__ == "__main__":
