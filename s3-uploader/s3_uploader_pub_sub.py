@@ -53,7 +53,7 @@ class S3UploaderPubSub(BaseMQTTPubSub):
         sleep(1)
         self.publish_registration("S3 Uploader Registration")
 
-    def _send_data(self, data) -> None:
+    def _send_data(self: Any, data: Dict[str, str]) -> None:
         self.publish_to_topic(self.send_data_topic, json.dumps(data))
 
     def _c2c_callback(
@@ -116,10 +116,10 @@ class S3UploaderPubSub(BaseMQTTPubSub):
 
 if __name__ == "__main__":
     s3_uploader = S3UploaderPubSub(
-        send_data_topic=os.environ.get("SEND_DATA_TOPIC"),
-        c2c_topic=os.environ.get("C2_TOPIC"),
-        target_dir=os.environ.get("TARGET_DIR"),
-        s3_bucket=os.environ.get("S3_BUCKET"),
-        mqtt_ip=os.environ.get("MQTT_IP"),
+        send_data_topic=str(os.environ.get("SEND_DATA_TOPIC")),
+        c2c_topic=str(os.environ.get("C2_TOPIC")),
+        target_dir=str(os.environ.get("TARGET_DIR")),
+        s3_bucket=str(os.environ.get("S3_BUCKET")),
+        mqtt_ip=str(os.environ.get("MQTT_IP")),
     )
     s3_uploader.main()
