@@ -15,10 +15,16 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
-      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:?error}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:?error}
+      # - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:?error}
+      # - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:?error}
     env_file:
       - .env
     volumes:
       - /home/mobian/sensor-data:/sensor-data
-      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
+    depends_on: 
+      - mqtt

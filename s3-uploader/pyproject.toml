@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "s3-uploader"
+version = "0.1.0"
+description = "MQTT client to upload locally stored data to S3 based on C2 upload command"
+authors = ["Ari <ari.chadda@gmail.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+schedule = "^1.1.0"
+awscli = "^1.27.55"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
