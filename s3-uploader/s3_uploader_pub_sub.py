@@ -75,10 +75,10 @@ class S3UploaderPubSub(BaseMQTTPubSub):
             self._send_data(f"syncing dir: {self.target_dir}")
             try:
                 # Use AWS CLI to sync to S3 Bucket
-                cmd_flags = ""
-                cmd_flags = cmd_flags + '--exclude "./audio/*.wav" --include "*"'
+                # cmd_flags = ""
+                cmd_flags = '--exclude "*" --include "*.json" --include "*.flac"'
                 sync_cmd = (
-                    f"aws s3 sync {self.target_dir} s3://{self.s3_bucket} " + cmd_flags
+                    f"aws s3 sync {cmd_flags} {self.target_dir} s3://{self.s3_bucket} "
                 )
 
                 # using subprocess to call the command

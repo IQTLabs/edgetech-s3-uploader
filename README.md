@@ -31,7 +31,7 @@
     <img src="images/logo.png" alt="Logo" width="331" height="153">
   </a>
 
-<h1 align="center">Edgetech-S3-Uploader</h1>
+<h1 align="center">EdgeTech-S3-Uploader</h1>
 
   <p align="center">
     This repo builds upon the <a href="https://github.com/IQTLabs/edgetech-core">IQT Labs Edgetech-Core</a> functionality to instantiate an <a href="https://projects.eclipse.org/projects/iot.mosquitto">MQTT</a> client uploades all the files saved by the [`edgetech-filesaver`](https://github.com/IQTLabs/edgetech-filesaver). Functionalty is also included to respond to a <a href="https://github.com/IQTLabs/edgetech-c2">Command and Control</a> module to trigger the upload. All of this functionality is wrapped in a Docker container for cross-platform compatability. 
