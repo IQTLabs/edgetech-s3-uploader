@@ -76,7 +76,7 @@ class S3UploaderPubSub(BaseMQTTPubSub):
             try:
                 # Use AWS CLI to sync to S3 Bucket
                 cmd_flags = ""
-                cmd_flags = cmd_flags + '--exclude "*" --include "*"'
+                cmd_flags = cmd_flags + '--exclude "./audio/*.wav" --include "*"'
                 sync_cmd = (
                     f"aws s3 sync {self.target_dir} s3://{self.s3_bucket} " + cmd_flags
                 )
@@ -87,11 +87,11 @@ class S3UploaderPubSub(BaseMQTTPubSub):
 
                 # Print Sucess or failure message
                 if self.sync_process.returncode == 0:
-                    self._send_data(stdout.decode())
+                    self._send_data(stdout)
                     if self.debug:
                         print(stdout)
                 else:
-                    self._send_data(stderr.decode())
+                    self._send_data(stderr)
                     if self.debug:
                         print(stderr)
 
