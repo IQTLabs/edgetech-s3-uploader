@@ -78,11 +78,11 @@ class S3UploaderPubSub(BaseMQTTPubSub):
                 # cmd_flags = ""
                 cmd_flags = '--exclude "*" --include "*.json" --include "*.flac"'
                 sync_cmd = (
-                    f"aws s3 sync {cmd_flags} {self.target_dir} s3://{self.s3_bucket} "
+                    f'aws s3 sync {cmd_flags} {self.target_dir} s3://{self.s3_bucket}'
                 )
 
                 # using subprocess to call the command
-                self.sync_process = subprocess.Popen(sync_cmd.split())
+                self.sync_process = subprocess.Popen(sync_cmd, shell=True)
                 stdout, stderr = self.sync_process.communicate()
 
                 # Print Sucess or failure message
