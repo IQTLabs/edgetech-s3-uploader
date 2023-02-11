@@ -12,9 +12,6 @@ services:
       context: ./s3-uploader
       dockerfile: ./Dockerfile
     restart: unless-stopped
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:?error}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:?error}
     env_file:
       - .env
     volumes:
