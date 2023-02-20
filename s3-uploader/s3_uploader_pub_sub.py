@@ -78,7 +78,7 @@ class S3UploaderPubSub(BaseMQTTPubSub):
                 # cmd_flags = ""
                 cmd_flags = '--exclude "*" --include "*.json" --include "*.flac"'
                 sync_cmd = (
-                    f'aws s3 sync {cmd_flags} {self.target_dir} s3://{self.s3_bucket}'
+                    f"aws s3 sync {cmd_flags} {self.target_dir} s3://{self.s3_bucket}"
                 )
 
                 # using subprocess to call the command
