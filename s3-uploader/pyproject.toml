@@ -2,7 +2,7 @@
 name = "s3-uploader"
 version = "0.1.0"
 description = "MQTT client to upload locally stored data to S3 based on C2 upload command"
-authors = ["Ari <ari.chadda@gmail.com>"]
+authors = ["Ari <achadda@iqt.org>", "Rob <rcaudill@iqt.org>", "Logan <lkunka@iqt.org>", "Mona <mgogia@iqt.org>", "Jon <jmeade@iqt.org>", "Mike <mchadwick@iqt.org>"]
 license = "Apache 2.0"
 
 [tool.poetry.dependencies]
