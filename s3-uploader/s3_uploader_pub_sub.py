@@ -85,7 +85,7 @@ class S3UploaderPubSub(BaseMQTTPubSub):
                 self.sync_process = subprocess.Popen(sync_cmd, shell=True)
                 stdout, stderr = self.sync_process.communicate()
 
-                # Print Sucess or failure message
+                # Print Success or failure message
                 if self.sync_process.returncode == 0:
                     self._send_data(stdout)
                     if self.debug:
