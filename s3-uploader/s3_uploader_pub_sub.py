@@ -124,9 +124,9 @@ class S3UploaderPubSub(BaseMQTTPubSub):
 
 if __name__ == "__main__":
     s3_uploader = S3UploaderPubSub(
-        send_data_topic=str(os.environ.get("SEND_DATA_TOPIC")),
+        send_data_topic=str(os.environ.get("S3_SEND_DATA_TOPIC")),
         c2c_topic=str(os.environ.get("C2_TOPIC")),
-        target_dir=str(os.environ.get("TARGET_DIR")),
+        target_dir=str(os.environ.get("DATA_ROOT")),
         s3_bucket=str(os.environ.get("S3_BUCKET")),
         mqtt_ip=str(os.environ.get("MQTT_IP")),
     )
